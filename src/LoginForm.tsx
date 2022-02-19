@@ -5,8 +5,8 @@ import axios from "axios";
 import { useState } from "react";
 import { setCookie } from "./shared/Cookie";
 import { useSetRecoilState } from "recoil";
-import { isLogin } from "./components/atoms";
-import { Link, useHistory } from "react-router-dom";
+import { isLogin, userInfo } from "./components/atoms";
+import { Link, useNavigate } from "react-router-dom";
 
 interface IForm {
   userName: string;
@@ -19,9 +19,9 @@ interface ILogin {
 }
 
 const LoginForm = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   let setLogin = useSetRecoilState(isLogin);
-
+  let setUserInfo = useSetRecoilState(userInfo);
   // const [isUserNameValid, setIsUserNameValid] = useState(false);
   // const [isNickNameValid, setIsNickNameValid] = useState(false);
 
@@ -45,8 +45,11 @@ const LoginForm = () => {
           setLogin(1);
           setCookie("userId", data.userName);
           setCookie("password", data.password);
+          setUserInfo(() => {
+            return [{ userName: data.userName, password: data.password }];
+          });
           alert(res.data.msg);
-          history.push("/")
+          navigate("/");
         } else {
           alert("비밀번호 일치여부를 확인해주세요");
         }
@@ -137,6 +140,7 @@ const LoginForm = () => {
 };
 
 const RegisterDiv = styled.div`
+  margin-top: 110px;
   width: 300px;
   background-color: #d9d5d4;
   border-radius: 20px;

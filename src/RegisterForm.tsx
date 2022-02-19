@@ -165,6 +165,7 @@ const RegisterForm = () => {
 };
 
 const RegisterDiv = styled.div`
+  margin-top: 30px;
   width: 300px;
   background-color: #d9d5d4;
   border-radius: 20px;

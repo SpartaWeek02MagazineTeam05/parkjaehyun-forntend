@@ -8,6 +8,7 @@ interface IText {
   size:string;
   children:React.ReactNode;
   margin:string;
+
 }
 
 const myText = (props:IText) => {

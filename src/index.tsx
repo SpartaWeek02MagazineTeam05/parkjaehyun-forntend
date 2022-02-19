@@ -6,11 +6,11 @@ import { RecoilRoot } from "recoil";
 
 ReactDOM.render(
   <React.StrictMode>
-    <RecoilRoot>
     <Router>
+    <RecoilRoot>
       <App />
-    </Router>
     </RecoilRoot>
+    </Router>
   </React.StrictMode>,
   document.getElementById("root")
 );

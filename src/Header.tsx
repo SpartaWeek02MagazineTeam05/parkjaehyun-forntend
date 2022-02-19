@@ -10,7 +10,7 @@ import { deleteCookie, getCookie } from "./shared/Cookie";
 const Header = () => {
   const navigate = useNavigate()
   const [islogin, setIslogin] = useRecoilState(isLogin);
-  const userinfo = useRecoilValue(userInfo)
+  const userinfo = useRecoilValue(userInfo);
   useEffect(() => {
     let cookie = getCookie(document.cookie);
     console.log("cookieList: ", document.cookie, cookie);
@@ -24,12 +24,14 @@ const Header = () => {
     }
   }, []);
 
+
   function a() {}
   function logout() {
     deleteCookie(userinfo[0]?.userName)
     navigate("/")
   }
 
+  
   if (islogin && userinfo) {
     return (
       <React.Fragment>
@@ -68,10 +70,10 @@ const Header = () => {
 
         <MyGrid is_flex>
           <Link to="/login">
-            <MyButton onClick={a}>로그인</MyButton>
+            <MyButton>로그인</MyButton>
           </Link>
           <Link to="/register">
-            <MyButton cursor="pointer" onClick={a}>
+            <MyButton cursor="pointer">
               회원가입
             </MyButton>
           </Link>

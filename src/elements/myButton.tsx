@@ -8,12 +8,13 @@ interface IButton {
   padding: string;
   bg: string;
   children: React.ReactNode;
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
-  cursor:string;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  cursor: string;
 }
 
 const MyButton = (props: IButton) => {
-  const { height, width, margin, padding, bg, children, onClick,cursor } = props;
+  const { height, width, margin, padding, bg, children, onClick, cursor } =
+    props;
 
   const styles = {
     height,
@@ -22,7 +23,7 @@ const MyButton = (props: IButton) => {
     padding: padding,
     bg: bg,
     onClick,
-    cursor: cursor
+    cursor: cursor,
   };
   return (
     <React.Fragment>

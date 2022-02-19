@@ -7,15 +7,15 @@ import { setCookie } from "./shared/Cookie";
 import { useSetRecoilState } from "recoil";
 import { isLogin, userInfo } from "./components/atoms";
 import { Link, useNavigate } from "react-router-dom";
-
+// import api from "./mockapi"
 interface IForm {
   userName: string;
   password: string;
 }
 
 interface ILogin {
-  password: string;
   userName: string;
+  password: string;
 }
 
 const LoginForm = () => {
@@ -35,23 +35,27 @@ const LoginForm = () => {
     formState: { errors },
   } = useForm<IForm>();
   async function onValid(data: ILogin) {
+
+    const auth = new URLSearchParams();
+    auth.append('userName', data.userName);
+    auth.append('password', data.password);
+    console.log(auth)
     await axios
-      .post("/api/register", {
-        userName: data.userName,
-        password: data.password,
-      })
+      .post("/api/register", auth)
       .then((res) => {
         if (res.data.result) {
-          setLogin(1);
           setCookie("userId", data.userName);
           setCookie("password", data.password);
+          setLogin(1);
           setUserInfo(() => {
             return [{ userName: data.userName, password: data.password }];
           });
           alert(res.data.msg);
           navigate("/");
         } else {
-          alert("비밀번호 일치여부를 확인해주세요");
+          alert(res.data.msg);
+
+          // alert("비밀번호 일치여부를 확인해주세요");
         }
       })
       .catch(() => alert("로그인에 문제가 발생했습니다."));

@@ -13,10 +13,10 @@ interface IForm {
 }
 
 interface IRegister {
-  password: string;
-  userPwdCheck: string;
   userName: string;
   nickName: string;
+  password: string;
+  userPwdCheck: string;
 }
 
 const RegisterForm = () => {
@@ -29,6 +29,7 @@ const RegisterForm = () => {
     register,
     handleSubmit,
     setError,
+    watch,
     formState: { errors },
   } = useForm<IForm>();
   async function onValid(data: IRegister) {
@@ -38,9 +39,9 @@ const RegisterForm = () => {
       await axios
         .post('/api/register', {
           userName: data.userName,
+          nickName: data.nickName,
           password: data.password,
           userPwdCheck: data.userPwdCheck,
-          nickName: data.nickName,
         })
         .then((res) => {
           if (res.data.result) {
@@ -52,6 +53,8 @@ const RegisterForm = () => {
         .catch(() => alert('회원가입에 문제가 발생했습니다.'));
     }
   }
+
+  console.log(watch())
 
   // console.log(watch());
 
@@ -91,7 +94,7 @@ const RegisterForm = () => {
         <form onSubmit={handleSubmit(onValid)}>
           <h5>아이디</h5>
           <InputDiv>
-            <Input
+            <Input 
               placeholder="이메일형식으로 입력하세요"
               {...register('userName', {
                 required: '아이디를 입력해주세요',
@@ -197,11 +200,13 @@ const Input = styled.input`
     outline: none;
   }
 `;
+
 const ErrorMessage = styled.p`
   font-size: 10px;
   color: red;
   margin-left: 20px;
 `;
+
 const Button = styled.button`
   &:hover {
     transition: 0.15s ease-in;

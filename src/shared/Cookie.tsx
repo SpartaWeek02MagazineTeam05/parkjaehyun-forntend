@@ -7,8 +7,7 @@ const getCookie = (name:string) => {
   let parts: string[] = value.split("; " + name + "=");
   // value를 return!
   if (parts.length === 2) {
-    parts.pop()
-		return parts.toString().split(";").shift();
+		return parts[0].toString().split(";").shift();
 	}
 };
 
@@ -25,5 +24,6 @@ const setCookie = (name:string, value:string, exp = 5) => {
 const deleteCookie = (name:string) => {
   document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
 }
+
 
 export { getCookie, setCookie, deleteCookie };

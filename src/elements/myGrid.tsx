@@ -9,6 +9,7 @@ interface IGrid {
   padding: string,
   bg: string,
   children: React.ReactNode,
+
 }
 
 const MyGrid = (props:IGrid) => {

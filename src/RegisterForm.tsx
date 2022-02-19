@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 interface IForm {
   nickName: string;
@@ -11,7 +12,7 @@ interface IForm {
   userPwdCheck: string;
 }
 
-interface IData {
+interface IRegister {
   password: string;
   userPwdCheck: string;
   userName: string;
@@ -30,7 +31,7 @@ const RegisterForm = () => {
     setError,
     formState: { errors },
   } = useForm<IForm>();
-  async function onValid(data: IData) {
+  async function onValid(data: IRegister) {
     if (data.password !== data.userPwdCheck) {
       setError('userPwdCheck', { message: '비밀번호가 일치하지 않습니다.' }, { shouldFocus: true });
     } else {
@@ -153,9 +154,11 @@ const RegisterForm = () => {
             <ErrorMessage>{errors?.userPwdCheck?.message}</ErrorMessage>
           </InputDiv>
 
-          <Button>회원가입</Button>
+          <Button>회원가입 완료!</Button>
         </form>
-        <Button>로그인</Button>
+        <Link to="/login">
+        <Button>로그인 페이지로!</Button>
+        </Link>
       </RegisterDiv>
     </FlexDiv>
   );

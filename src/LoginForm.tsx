@@ -1,55 +1,57 @@
-import React from 'react';
-import styled from 'styled-components';
-import { useForm } from 'react-hook-form';
-import axios from 'axios';
-import { useState } from 'react';
+import React from "react";
+import styled from "styled-components";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import { useState } from "react";
+import { setCookie } from "./shared/Cookie";
+import { useSetRecoilState } from "recoil";
+import { isLogin } from "./components/atoms";
+import { Link, useHistory } from "react-router-dom";
 
 interface IForm {
-  nickName: string;
   userName: string;
   password: string;
-  userPwdCheck: string;
 }
 
-interface IData {
+interface ILogin {
   password: string;
-  userPwdCheck: string;
   userName: string;
-  nickName: string;
 }
 
 const LoginForm = () => {
+  const history = useHistory();
+  let setLogin = useSetRecoilState(isLogin);
+
   // const [isUserNameValid, setIsUserNameValid] = useState(false);
   // const [isNickNameValid, setIsNickNameValid] = useState(false);
 
   // let seePassword = true;
   // let seeUserPwdCheck = true;
+
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors },
   } = useForm<IForm>();
-  async function onValid(data: IData) {
-    if (data.password !== data.userPwdCheck) {
-      setError('userPwdCheck', { message: '비밀번호가 일치하지 않습니다.' }, { shouldFocus: true });
-    } else {
-      await axios
-        .post('/api/register', {
-          userName: data.userName,
-          password: data.password,
-          userPwdCheck: data.userPwdCheck,
-          nickName: data.nickName,
-        })
-        .then((res) => {
-          if (res.data.result) {
-            alert(res.data.msg);
-          } else {
-            alert('비밀번호 일치여부를 확인해주세요');
-          }
-        })
-        .catch(() => alert('회원가입에 문제가 발생했습니다.'));
-    }
+  async function onValid(data: ILogin) {
+    await axios
+      .post("/api/register", {
+        userName: data.userName,
+        password: data.password,
+      })
+      .then((res) => {
+        if (res.data.result) {
+          setLogin(1);
+          setCookie("userId", data.userName);
+          setCookie("password", data.password);
+          alert(res.data.msg);
+          history.push("/")
+        } else {
+          alert("비밀번호 일치여부를 확인해주세요");
+        }
+      })
+      .catch(() => alert("로그인에 문제가 발생했습니다."));
   }
 
   // console.log(watch());
@@ -92,13 +94,14 @@ const LoginForm = () => {
           <InputDiv>
             <Input
               placeholder="이메일형식으로 입력하세요"
-              {...register('userName', {
-                required: '아이디를 입력해주세요',
+              {...register("userName", {
+                required: "아이디를 입력해주세요",
                 // onBlur: (e) => userNameValid(e),
                 minLength: 4,
                 pattern: {
-                  value: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
-                  message: '이메일 형식이 아닙니다.',
+                  value:
+                    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
+                  message: "이메일 형식이 아닙니다.",
                 },
               })}
             ></Input>
@@ -109,30 +112,13 @@ const LoginForm = () => {
             : "이미 존재하는 아이디입니다."} */}
             </ErrorMessage>
           </InputDiv>
-          <h5>닉네임</h5>
-          <InputDiv>
-            <Input
-              placeholder="닉네임을 입력하세요"
-              {...register('nickName', {
-                required: '닉네임을 입력해주세요',
-                // onBlur: (e) => userNickNameValid(e),
-                minLength: 4,
-              })}
-            ></Input>
-            <ErrorMessage>{errors ? errors?.nickName?.message : ''}</ErrorMessage>
-            <ErrorMessage>
-              {/* {isNickNameValid
-            ? "사용 가능한 닉네임입니다."
-          : "이미 존재하는 닉네임입니다."} */}
-            </ErrorMessage>
-          </InputDiv>
 
           <h5>비밀번호</h5>
           <InputDiv>
             <Input
               placeholder="비밀번호를 입력하세요"
-              {...register('password', {
-                required: '비밀번호를 입력하세요',
+              {...register("password", {
+                required: "비밀번호를 입력하세요",
                 minLength: 4,
               })}
             ></Input>
@@ -140,22 +126,11 @@ const LoginForm = () => {
             <ErrorMessage>{errors?.password?.message}</ErrorMessage>
           </InputDiv>
 
-          <h5>비밀번호 확인</h5>
-          <InputDiv>
-            <Input
-              placeholder="비밀번호를 다시 입력하세요"
-              {...register('userPwdCheck', {
-                required: '비밀번호를 한번 더 입력하세요',
-                minLength: 4,
-              })}
-            ></Input>
-
-            <ErrorMessage>{errors?.userPwdCheck?.message}</ErrorMessage>
-          </InputDiv>
-
-          <Button>회원가입</Button>
+          <Button>로그인 완료!</Button>
         </form>
-        <Button>로그인</Button>
+        <Link to="/register">
+          <Button>회원가입 페이지로!</Button>
+        </Link>
       </RegisterDiv>
     </FlexDiv>
   );

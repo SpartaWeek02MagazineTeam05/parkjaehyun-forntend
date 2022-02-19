@@ -5,11 +5,13 @@ import { Route, Routes } from "react-router";
 import RegisterForm from "./RegisterForm";
 import LoginForm from "./LoginForm";
 import Home from "./Home";
+import Header from "./Header";
 
 function App() {
   return (
     <div className="App">
-      <MainTitle>Fivegram</MainTitle>
+      <Header />
+
       <Container>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -27,8 +29,6 @@ const Container = styled.div`
   flex-direction: column;
   width: 100vw;
 `;
-const MainTitle = styled.h1`
-  margin-left: 17px;
-`;
+
 
 export default App;

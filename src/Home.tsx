@@ -1,4 +1,8 @@
+import styled from "styled-components";
+
 const Home = () => {
-  return null;
+  return <Div></Div>;
 };
+
+const Div = styled.h1``
 export default Home;

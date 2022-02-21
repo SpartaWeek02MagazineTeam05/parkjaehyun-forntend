@@ -6,6 +6,7 @@ import RegisterForm from "./RegisterForm";
 import LoginForm from "./LoginForm";
 import Home from "./Home";
 import Header from "./Header";
+import MakePost from "./MakePost";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/login" element={<LoginForm />} />
+          <Route path="/makepost" element={<MakePost />} />
         </Routes>
       </Container>
     </div>
@@ -29,6 +31,5 @@ const Container = styled.div`
   flex-direction: column;
   width: 100vw;
 `;
-
 
 export default App;

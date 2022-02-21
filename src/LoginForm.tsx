@@ -48,17 +48,24 @@ const LoginForm = () => {
           setCookie("password", data.password);
           setLogin(1);
           setUserInfo(() => {
-            return [{ userName: data.userName, password: data.password }];
+            return [{ userName: res.data.userName, nickName: res.data.nickName }];
           });
-          alert(res.data.msg);
+          alert(res.data.message);
           navigate("/");
+          console.log("success",res)
+          
         } else {
+          console.log("fail",res)
           alert(res.data.msg);
 
           // alert("비밀번호 일치여부를 확인해주세요");
         }
       })
-      .catch(() => alert("로그인에 문제가 발생했습니다."));
+
+      .catch(() =>
+
+
+       alert("로그인에 문제가 발생했습니다."));
   }
 
   // console.log(watch());

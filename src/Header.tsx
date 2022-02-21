@@ -47,7 +47,10 @@ const Header = () => {
           </MyGrid>
 
           <MyGrid is_flex>
-            <MyButton onClick={a}>내정보</MyButton>
+
+            <MyButton onClick={a}>포스팅하기</MyButton>
+
+            <MyButton onClick={a}>내 정보</MyButton>
             <MyButton onClick={a}>알림</MyButton>
             <MyButton onClick={logout}>로그아웃</MyButton>
           </MyGrid>

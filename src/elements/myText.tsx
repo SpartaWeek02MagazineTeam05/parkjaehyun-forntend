@@ -7,7 +7,7 @@ interface IText {
   color:string;
   size:string;
   children:React.ReactNode;
-  margin:string;
+  margin?:string;
 
 }
 

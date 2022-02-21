@@ -10,29 +10,35 @@ import { deleteCookie, getCookie } from "./shared/Cookie";
 const Header = () => {
   const navigate = useNavigate()
   const [islogin, setIslogin] = useRecoilState(isLogin);
-  const userinfo = useRecoilValue(userInfo);
+  const [userinfo,setUserInfo] = useRecoilState(userInfo);
+
   useEffect(() => {
-    let cookie = getCookie(document.cookie);
+    let cookie = document.cookie;
     console.log("cookieList: ", document.cookie, cookie);
-    console.log(userinfo[0]?.userName);
+    console.log(userinfo[0]?.username);
 
-
+    
     if (cookie) {
+      const user = cookie.split("=").pop()
       setIslogin(1);
+
     } else {
       setIslogin(0);
+
+
     }
+
   }, []);
 
 
   function a() {}
   function logout() {
-    deleteCookie(userinfo[0]?.userName)
+    deleteCookie(userinfo[0]?.username)
     navigate("/")
   }
-
+  console.log(islogin,userinfo[0])
   
-  if (islogin && userinfo) {
+  if (islogin) {
     return (
       <React.Fragment>
         <MyGrid is_flex padding="4px 16px">

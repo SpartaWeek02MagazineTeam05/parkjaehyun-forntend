@@ -9,13 +9,16 @@ import { isLogin, userInfo } from "./components/atoms";
 import { Link, useNavigate } from "react-router-dom";
 // import api from "./mockapi"
 interface IForm {
-  userName: string;
+  username: string;
   password: string;
+  nickName?: string;
 }
 
 interface ILogin {
-  userName: string;
+  username: string;
   password: string;
+  nickName?: string;
+
 }
 
 const LoginForm = () => {
@@ -37,19 +40,22 @@ const LoginForm = () => {
   async function onValid(data: ILogin) {
 
     const auth = new URLSearchParams();
-    auth.append('userName', data.userName);
+    // const auth = new FormData();
+    auth.append('username', data.username);
     auth.append('password', data.password);
     console.log(auth)
     await axios
       .post("/api/register", auth)
       .then((res) => {
         if (res.data.result) {
-          setCookie("userId", data.userName);
+          setCookie("userId", data.username);
           setCookie("password", data.password);
           setLogin(1);
-          setUserInfo(() => {
-            return [{ userName: res.data.userName, nickName: res.data.nickName }];
-          });
+          setUserInfo(
+            // console.log(res.data.username, res.data.nickName)
+           [{ username: res.data.username, nickName: res.data.nickName }]
+          );
+          setCookie("nickName",res.data.nickName)
           alert(res.data.message);
           navigate("/");
           console.log("success",res)
@@ -108,7 +114,7 @@ const LoginForm = () => {
           <InputDiv>
             <Input
               placeholder="이메일형식으로 입력하세요"
-              {...register("userName", {
+              {...register("username", {
                 required: "아이디를 입력해주세요",
                 // onBlur: (e) => userNameValid(e),
                 minLength: 4,
@@ -119,7 +125,7 @@ const LoginForm = () => {
                 },
               })}
             ></Input>
-            <ErrorMessage>{errors?.userName?.message}</ErrorMessage>
+            <ErrorMessage>{errors?.username?.message}</ErrorMessage>
             <ErrorMessage>
               {/* {isUserNameValid
             ? "사용 가능한 아이디입니다."

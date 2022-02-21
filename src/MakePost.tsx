@@ -15,18 +15,21 @@ import { useNavigate } from "react-router";
 import { useRef } from "react";
 
 interface IForm {
-  userId: string;
+  username: string;
   image: string;
   contents: string;
 }
 
 interface IPostUpload {
-  userId: string;
+  username: string;
   image: string;
   contents: string;
 }
 
 const MakePost = () => {
+  let cookie = document.cookie;
+  console.log(cookie)
+  const user = cookie.split("=").pop()
   // const imgInput = useRef<HTMLInputElement>(0)
   const navigate = useNavigate();
   const [category, setCategory] = useRecoilState(imgCategoryState);
@@ -50,6 +53,7 @@ const MakePost = () => {
   async function onValid(data: IPostUpload) {
     await axios
       .post("/api/register", {
+
         nickName: userinfo[0].nickName,
         image: data.image,
         contents: data.contents,
@@ -73,7 +77,7 @@ const MakePost = () => {
 
         <form onSubmit={handleSubmit(onValid)}>
           <h5>이미지</h5>
-          <InputDiv>
+
             <input
               accept="image/*"
               placeholder="이메일형식으로 입력하세요"
@@ -82,7 +86,7 @@ const MakePost = () => {
                 onChange: uploadFile,
               })}
             ></input>
-          </InputDiv>
+
           <h5>내용</h5>
 
             <Input
@@ -93,10 +97,18 @@ const MakePost = () => {
                 minLength: 4,
               })}
             ></Input>
-            <ErrorMessage></ErrorMessage>
+
 
           <h5>사진 위치</h5>
-          <select value={category} onInput={onInput}>
+          
+          <select 
+          {...register("category" as any,{
+
+            value: category
+            // onInput: onInput
+          })}
+          onInput={onInput}
+          >
             <option value={IimgCategories.FULL}>Full</option>
             <option value={IimgCategories.RIGHT}>Right</option>
             <option value={IimgCategories.LEFT}>Left</option>

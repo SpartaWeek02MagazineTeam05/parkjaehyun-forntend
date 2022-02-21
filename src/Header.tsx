@@ -12,28 +12,28 @@ const Header = () => {
   const [islogin, setIslogin] = useRecoilState(isLogin);
   const [userinfo,setUserInfo] = useRecoilState(userInfo);
 
+  let cookie = document.cookie;
+
   useEffect(() => {
-    let cookie = document.cookie;
-    console.log("cookieList: ", document.cookie, cookie);
-    console.log(userinfo[0]?.username);
-
-    
     if (cookie) {
-      const user = cookie.split("=").pop()
       setIslogin(1);
-
     } else {
       setIslogin(0);
-
-
     }
-
   }, []);
 
 
   function a() {}
-  function logout() {
-    deleteCookie(userinfo[0]?.username)
+  const logout = () => {
+
+
+    deleteCookie("username")
+    deleteCookie("nickName")
+
+
+    
+
+
     navigate("/")
   }
   console.log(islogin,userinfo[0])

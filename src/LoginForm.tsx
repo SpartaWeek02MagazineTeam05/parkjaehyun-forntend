@@ -48,8 +48,8 @@ const LoginForm = () => {
       .post("/api/register", auth)
       .then((res) => {
         if (res.data.result) {
-          setCookie("userId", data.username);
-          setCookie("password", data.password);
+          setCookie("username", data.username);
+
           setLogin(1);
           setUserInfo(
             // console.log(res.data.username, res.data.nickName)

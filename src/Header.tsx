@@ -27,14 +27,12 @@ const Header = () => {
   const logout = () => {
 
 
+
     deleteCookie("username")
     deleteCookie("nickName")
+    window.location.replace("/")
+    // navigate("/")
 
-
-    
-
-
-    navigate("/")
   }
   console.log(islogin,userinfo[0])
   
@@ -53,9 +51,9 @@ const Header = () => {
           </MyGrid>
 
           <MyGrid is_flex>
-
+            <Link to="/makepost">
             <MyButton onClick={a}>포스팅하기</MyButton>
-
+            </Link>
             <MyButton onClick={a}>내 정보</MyButton>
             <MyButton onClick={a}>알림</MyButton>
             <MyButton onClick={logout}>로그아웃</MyButton>

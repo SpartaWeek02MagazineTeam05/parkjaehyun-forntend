@@ -21,7 +21,7 @@ const Home = () => {
 
 const HomeDiv = styled.div`
   display: flex;
-  width: 600px;
+  /* width: 800px; */
 `;
 
 const Div = styled.h1``;

@@ -1,20 +1,21 @@
 import styled from "styled-components";
 import Post from "./post";
 import { useRecoilValue } from "recoil";
-import { postList } from "./components/atoms";
-import { useEffect, useState } from "react";
-import axios from "axios";
 
-interface Ipost {
-  Id: number;
-  nickName: string;
-  contents: string;
-  likeCount: number;
-  image: string;
-  type: string;
-  createdAt: string;
-  modifiedAt: string;
-}
+import { Suspense, useEffect, useState } from "react";
+import axios from "axios";
+import { postListAtom } from "./components/atoms";
+
+// interface Ipost {
+//   Id: number;
+//   nickName: string;
+//   contents: string;
+//   likeCount: number;
+//   image: string;
+//   type: string;
+//   createdAt: string;
+//   modifiedAt: string;
+// }
 
 function Home() {
   const [postlist, setPostlist] = useState([]);
@@ -28,7 +29,6 @@ function Home() {
         console.log(res.data);
         const postlist = res.data.posts;
         return setPostlist(postlist);
-
       })
       .catch(() => alert("게시물이 없습니다."));
   };
@@ -36,13 +36,12 @@ function Home() {
   return (
     <>
       <HomeDiv>
-      <ul>
-        {postlist.map((post: any) => (
-
-          <li key={post.Id}>
-            <Post {...post} />
-          </li>)
-        )}
+        <ul>
+          {postlist.map((post: any) => (
+            <li key={post.Id}>
+              <Post {...post} />
+            </li>
+          ))}
         </ul>
       </HomeDiv>
     </>

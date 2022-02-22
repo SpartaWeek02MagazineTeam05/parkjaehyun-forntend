@@ -13,7 +13,7 @@ export interface IpostList {
   likeCount: number;
 }
 
-export const postList = atom<IpostList[]>({
+export const postListAtom = atom<IpostList[]>({
   key: "postlist",
   default: [
     {
@@ -56,3 +56,8 @@ export const userInfo = atom<IUserInfo[]>({
 //   key: "imgCategory",
 //   default: IimgCategories.FULL,
 // });
+
+export const likeList = atom<number[]>({
+  key: "likeList",
+  default:[0,0,0]
+})

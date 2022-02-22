@@ -6,6 +6,10 @@ import React from "react";
 import { MyGrid, MyImage, MyText } from "./elements/Elements";
 import { useRecoilValue } from "recoil";
 import { IpostList } from "./components/atoms";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { RiLayoutColumnFill } from "react-icons/ri";
+import styled from "styled-components";
+
 
 interface Ipost {
   "Id":number,
@@ -19,9 +23,82 @@ interface Ipost {
 }
 // const props = useRecoilValue(postList)
 const Post = (p:Ipost) => {
+
+  let cookie = document.cookie;
+  const nick = cookie.split(" ")[1].split("=").pop();
   return (
     <React.Fragment>
-      <MyGrid>
+      <PostDiv>
+      <h4>작성자 : {nick}</h4>
+        {p.type === "full" && (
+          <>
+            <img width="380px" src={p.image}></img>
+            <Likes>
+            {p.likeCount}
+              
+              <FaRegHeart style={{ color: "red", marginRight: "4px" }} />
+            </Likes>
+            <TextView>{p.contents}</TextView>
+          </>
+        )}
+        {p.type === "right" && (
+          <>
+            <div style={{ display: "flex" }}>
+              <div
+                style={{
+                  width: "290px",
+                  height: "350px",
+                  overflow: "hidden",
+                  marginRight: "5px",
+                }}
+              >
+                <img
+                  style={{ marginLeft: "-85px" }}
+                  width="auto"
+                  height="340px"
+                  src={p.image}
+                ></img>
+              </div>
+              <TextView style={{ height: "310px" }}>
+                {p.contents}
+              </TextView>
+            </div>
+            <Likes>
+              {p.likeCount}
+              <FaRegHeart style={{ color: "red", marginRight: "4px" }} />
+            </Likes>
+          </>
+        )}
+        {p.type === "left" && (
+          <>
+            <div style={{ display: "flex" }}>
+              <TextView style={{ height: "310px" }}>
+                {p.contents}
+              </TextView>
+              <div
+                style={{
+                  width: "320px",
+                  height: "350px",
+                  overflow: "hidden",
+                  marginLeft: "5px",
+                }}
+              >
+                <img
+                  style={{ marginLeft: "-85px" }}
+                  width="auto"
+                  height="340px"
+                  src={p.image}
+                ></img>
+              </div>
+            </div>
+            <Likes>
+            {p.likeCount}
+              
+              <FaRegHeart style={{ color: "red", marginRight: "4px" }} />
+            </Likes>
+          </>
+        )}
+      {/* <MyGrid>
         <MyGrid is_flex>
           <MyText bold>작성자 : {p.nickName}</MyText>
         </MyGrid>
@@ -34,10 +111,31 @@ const Post = (p:Ipost) => {
         <MyGrid>
           <MyText bold>likes : {p.likeCount}</MyText>
         </MyGrid>
-      </MyGrid>
+      </MyGrid> */}
+      </PostDiv>
     </React.Fragment>
   );
 };
+
+const Likes = styled.div`
+  display: flex;
+  width: 380px;
+  height: 20px;
+  font-size: 20px;
+  flex-direction: row-reverse;
+`;
+const TextView = styled.div`
+  word-wrap: break-word;
+  white-space: normal;
+  width: 380px;
+  height: 97px;
+  margin-top: 10px;
+  overflow: hidden;
+`;
+
+const PostDiv = styled.div`
+width: 400px;
+`
 
 Post.defaultProps = {
   user_info: {

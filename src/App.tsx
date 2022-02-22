@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import styled from "styled-components";
 
 import { Route, Routes } from "react-router";
@@ -8,6 +8,7 @@ import Home from "./Home";
 import Header from "./Header";
 import MakePost from "./MakePost";
 
+
 function App() {
   return (
     <div className="App">
@@ -15,7 +16,6 @@ function App() {
 
       <Container>
         <Routes>
-
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/login" element={<LoginForm />} />

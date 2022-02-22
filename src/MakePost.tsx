@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { FaRegHeart } from "react-icons/fa";
 import { RiLayoutColumnFill } from "react-icons/ri";
 
@@ -12,6 +12,7 @@ import {
   // IimgCategories,
   // imgCategoryState,
   isLogin,
+  likeList,
   userInfo,
 } from "./components/atoms";
 import { useNavigate } from "react-router";
@@ -31,7 +32,7 @@ interface IPostUpload {
 const MakePost = () => {
   const [layout, setLayout] = useState("full");
   let cookie = document.cookie;
-  console.log(cookie);
+
   const nick = cookie.split(" ")[1].split("=").pop();
 
   const navigate = useNavigate();
@@ -95,7 +96,7 @@ const MakePost = () => {
     watch,
     formState: { errors },
   } = useForm<IForm>();
-
+  const setlikelist = useSetRecoilState(likeList)
   async function onValid(data: IPostUpload) {
     await axios
       .post("/api/posts", {
@@ -107,6 +108,7 @@ const MakePost = () => {
       .then((res) => {
         if (res.data.result) {
           alert(res.data.msg);
+          setlikelist(likelist => [0, ...likelist])
           window.location.replace("/");
         } else {
           alert("포스팅을 실패했습니다.");

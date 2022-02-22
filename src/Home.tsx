@@ -7,19 +7,7 @@ import axios from "axios";
 import { likeList, postListAtom } from "./components/atoms";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 
-// interface Ipost {
-//   Id: number;
-//   nickName: string;
-//   contents: string;
-//   likeCount: number;
-//   image: string;
-//   type: string;
-//   createdAt: string;
-//   modifiedAt: string;
-// }
-
 function Home() {
-  
 
   const [postlist, setPostlist] = useState([]);
   const [likelist, setLikeList] = useRecoilState(likeList);

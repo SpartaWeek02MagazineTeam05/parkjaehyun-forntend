@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface IForm {
   nickName: string;
@@ -25,6 +25,7 @@ const RegisterForm = () => {
 
   // let seePassword = true;
   // let seeUserPwdCheck = true;
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -46,6 +47,7 @@ const RegisterForm = () => {
         .then((res) => {
           if (res.data.result) {
             alert(res.data.msg);
+            navigate("/")
           } else {
             alert('비밀번호 일치여부를 확인해주세요');
           }

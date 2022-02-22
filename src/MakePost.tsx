@@ -6,10 +6,11 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { FaRegHeart } from "react-icons/fa";
+import { RiLayoutColumnFill } from "react-icons/ri";
 
 import {
-  IimgCategories,
-  imgCategoryState,
+  // IimgCategories,
+  // imgCategoryState,
   isLogin,
   userInfo,
 } from "./components/atoms";
@@ -28,18 +29,17 @@ interface IPostUpload {
 }
 
 const MakePost = () => {
+  const [layout, setLayout] = useState("full");
   let cookie = document.cookie;
   console.log(cookie);
   const nick = cookie.split(" ")[1].split("=").pop();
-  // const imgInput = useRef<HTMLInputElement>(0)
+
   const navigate = useNavigate();
-  const [category, setCategory] = useRecoilState(imgCategoryState);
+
   const islogin = useRecoilValue(isLogin);
   const userinfo = useRecoilValue(userInfo);
   console.log("userINFO", userinfo);
-  const onInput = (e: React.FormEvent<HTMLSelectElement>) => {
-    setCategory(e.currentTarget.value as any);
-  };
+
   const [files, setFiles] = useState<FileList | null>(null);
   const uploadFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log("aaa");
@@ -50,18 +50,29 @@ const MakePost = () => {
   };
   const [imgSrc, setImgSrc] = useState("");
 
-  const saveImg = () => {
-    const formdata = new FormData();
-    if (files) {
-      formdata.append("uploadImage", files[0]);
-    }
-    const config = {
-      Headers: {
-        "content-type": "multipart/form-data",
-      },
-    };
-    // axios.post('api',formdata,config)
-  };
+  // const saveImg = () => {
+  //   const formdata = new FormData();
+  //   if (files) {
+  //     formdata.append("uploadImage", files[0]);
+  //   }
+  //   const config = {
+  //     Headers: {
+  //       "content-type": "multipart/form-data",
+  //     },
+  //   };
+  //   // axios.post('api',formdata,config)
+  // };
+
+  function full() {
+    setLayout("full");
+  }
+  function right() {
+    setLayout("right");
+  }
+  function left() {
+    setLayout("left");
+  }
+
   // @ts-ignore
   // useEffect(() => {
   //   preview();
@@ -84,21 +95,25 @@ const MakePost = () => {
     watch,
     formState: { errors },
   } = useForm<IForm>();
+
   async function onValid(data: IPostUpload) {
     await axios
-      .post("/api/register", {
-        nickName: userinfo[0].nickName,
+      .post("/api/posts", {
+        nickName: nick,
         image: data.image,
         contents: data.contents,
+        type: layout
       })
       .then((res) => {
         if (res.data.result) {
           alert(res.data.msg);
+          window.location.replace("/");
         } else {
-          alert("비밀번호 일치여부를 확인해주세요");
+          alert("포스팅을 실패했습니다.");
         }
       })
-      .catch(() => alert("회원가입에 문제가 발생했습니다."));
+
+      .catch(() => alert("포스팅에 문제가 발생했습니다."));
   }
   console.log("reg", register);
   console.log(watch());
@@ -110,10 +125,8 @@ const MakePost = () => {
     return new Promise((resolve) => {
       reader.onload = () => {
         // @ts-ignore
-
         setImageSrc(reader.result);
         // @ts-ignore
-
         resolve();
       };
     });
@@ -121,13 +134,40 @@ const MakePost = () => {
 
   return (
     <FlexDiv>
-      {/* <div
-        className="img__box"
-        style={{ width: "200px", height: "220px" }}
-      ></div> */}
-      <RegisterDiv>
-        <RegisterTitle>포스트작성</RegisterTitle>
 
+      <RegisterDiv>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <RegisterTitle>포스트작성</RegisterTitle>
+
+          <RiLayoutColumnFill
+            onClick={full}
+            style={
+              layout === "full"
+                ? { color: "red", fontSize: "34px", transform: "rotate(90deg)" }
+                : { fontSize: "34px", transform: "rotate(90deg)" }
+            }
+          />
+          <RiLayoutColumnFill
+            onClick={right}
+            style={
+              layout === "right"
+                ? { color: "red", fontSize: "34px" }
+                : { fontSize: "34px" }
+            }
+          />
+          <RiLayoutColumnFill
+            onClick={left}
+            style={
+              layout === "left"
+                ? {
+                    color: "red",
+                    fontSize: "34px",
+                    transform: "rotate(180deg)",
+                  }
+                : { fontSize: "34px", transform: "rotate(180deg)" }
+            }
+          />
+        </div>
         <form onSubmit={handleSubmit(onValid)}>
           <h5>이미지</h5>
           <input
@@ -143,75 +183,105 @@ const MakePost = () => {
             {imageSrc && <img width="270px" src={imageSrc} alt="preview-img" />}
           </div>
 
-          {/* <input
-            id="imgae"
-            accept="image/*"
-            placeholder="이메일형식으로 입력하세요"
-            type="file"
-            // onChange={uploadFile}
-            {...register("image", {
-              onChange: uploadFile,
-            })}
-          ></input>
-          <label htmlFor="imgae"> 파일 선택하기 </label>
-          <button onClick={saveImg}></button> */}
           <h5>이미지경로</h5>
-
-          <Input
-            placeholder="이미지 경로를 입력해주세요"
-            style={{ height: "30px" }}
-            {...register("image", {
-              required: "이미지 경로를 입력해주세요",
-
-              // onBlur: (e) => userNickNameValid(e),
-              minLength: 4,
-            })}
-          ></Input>
+          <InputDiv>
+            <Input
+              placeholder="이미지 경로를 입력해주세요"
+              style={{ height: "30px" }}
+              {...register("image", {
+                required: "이미지 경로를 입력해주세요",
+                minLength: 4,
+              })}
+            ></Input>
+            <ErrorMessage>{errors?.image?.message}</ErrorMessage>
+          </InputDiv>
 
           <h5>내용</h5>
-
-          <Input
-            placeholder="게시글을 작성해주세요"
-            {...register("contents", {
-              required: "게시글을 입력해주세요",
-              // onBlur: (e) => userNickNameValid(e),
-              minLength: 4,
-            })}
-          ></Input>
-
-          <h5>사진 위치</h5>
-
-          <select
-            {...register("category" as any, {
-              value: category,
-              // onInput: onInput
-            })}
-            onInput={onInput}
-          >
-            <option value={IimgCategories.FULL}>Full</option>
-            <option value={IimgCategories.RIGHT}>Right</option>
-            <option value={IimgCategories.LEFT}>Left</option>
-          </select>
-
+          <InputDiv>
+            <Input
+              placeholder="게시글을 작성해주세요"
+              {...register("contents", {
+                required: "게시글을 입력해주세요",
+                minLength: 4,
+              })}
+            ></Input>
+            <ErrorMessage>{errors?.contents?.message}</ErrorMessage>
+          </InputDiv>
           <Button>포스팅하기!</Button>
         </form>
       </RegisterDiv>
 
-      {/* {isLogin && userInfo ? <NonLoginDiv>로그인 후 이용해주세요!</NonLoginDiv>: ""} */}
-      {watch().category === "0" && "dsf"}
+      {isLogin ? "":<NonLoginDiv>로그인 후 이용해주세요!</NonLoginDiv>}
+
       <RegisterDiv style={{ width: "400px" }}>
         <PostView>미리보기</PostView>
         <h4>작성자 : {nick}</h4>
-        <img
-          width="380px"
-          src={watch().image}
-          alt="여기에 이미지가 표시됩니다."
-        ></img>
-        <Likes>
-          0
-          <FaRegHeart style={{ color: "red", marginRight: "4px" }} />
-        </Likes>
-        <TextView>{watch().contents}</TextView>
+        {layout === "full" && (
+          <>
+            <img width="380px" src={watch().image}></img>
+            <Likes>
+              0
+              <FaRegHeart style={{ color: "red", marginRight: "4px" }} />
+            </Likes>
+            <TextView>{watch().contents}</TextView>
+          </>
+        )}
+        {layout === "right" && (
+          <>
+            <div style={{ display: "flex" }}>
+              <div
+                style={{
+                  width: "290px",
+                  height: "350px",
+                  overflow: "hidden",
+                  marginRight: "5px",
+                }}
+              >
+                <img
+                  style={{ marginLeft: "-85px" }}
+                  width="auto"
+                  height="340px"
+                  src={watch().image}
+                ></img>
+              </div>
+              <TextView style={{ height: "310px" }}>
+                {watch().contents}
+              </TextView>
+            </div>
+            <Likes>
+              0
+              <FaRegHeart style={{ color: "red", marginRight: "4px" }} />
+            </Likes>
+          </>
+        )}
+        {layout === "left" && (
+          <>
+            <div style={{ display: "flex" }}>
+              <TextView style={{ height: "310px" }}>
+                {watch().contents}
+              </TextView>
+              <div
+                style={{
+                  width: "320px",
+                  height: "350px",
+                  overflow: "hidden",
+                  marginLeft: "5px",
+                }}
+              >
+                <img
+                  style={{ marginLeft: "-85px" }}
+                  width="auto"
+                  height="340px"
+                  src={watch().image}
+                ></img>
+              </div>
+            </div>
+            <Likes>
+              0
+              <FaRegHeart style={{ color: "red", marginRight: "4px" }} />
+            </Likes>
+          </>
+        )}
       </RegisterDiv>
     </FlexDiv>
   );
@@ -221,20 +291,23 @@ const RegisterDiv = styled.div`
   margin: 30px;
 
   width: 300px;
+  height: 700px;
   background-color: #d9d5d4;
   border-radius: 20px;
   padding: 20px;
   padding-left: 45px;
   box-shadow: 1px 1px 1px gray;
 `;
-const RegisterTitle = styled.h2``;
+const RegisterTitle = styled.h2`
+  margin-right: 70px;
+`;
 const InputDiv = styled.div`
   height: 60px;
 `;
 const Input = styled.input`
   border-radius: 20px;
   border: 0;
-  height: 130px;
+  height: 30px;
   width: 260px;
   padding: 5px;
   padding-left: 14px;
@@ -303,7 +376,8 @@ const TextView = styled.div`
   word-wrap: break-word;
   white-space: normal;
   width: 380px;
-  height: 140px;
+  height: 97px;
   margin-top: 10px;
+  overflow: hidden;
 `;
 export default MakePost;

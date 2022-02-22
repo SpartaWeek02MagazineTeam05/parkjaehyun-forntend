@@ -15,6 +15,7 @@ function App() {
 
       <Container>
         <Routes>
+
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/login" element={<LoginForm />} />

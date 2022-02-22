@@ -46,13 +46,13 @@ export const userInfo = atom<IUserInfo[]>({
   default: [],
 });
 
-export enum IimgCategories {
-  "FULL",
-  "RIGHT",
-  "LEFT",
-}
+// export enum IimgCategories {
+//   "FULL",
+//   "RIGHT",
+//   "LEFT",
+// }
 
-export const imgCategoryState = atom<IimgCategories>({
-  key: "imgCategory",
-  default: IimgCategories.FULL,
-});
+// export const imgCategoryState = atom<IimgCategories>({
+//   key: "imgCategory",
+//   default: IimgCategories.FULL,
+// });

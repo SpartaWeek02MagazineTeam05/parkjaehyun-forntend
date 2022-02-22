@@ -7,29 +7,32 @@ import { MyGrid, MyImage, MyText } from "./elements/Elements";
 import { useRecoilValue } from "recoil";
 import { IpostList } from "./components/atoms";
 
+interface Ipost {
+  "Id":number,
+  "nickName":string,
+  "contents":string,
+  "likeCount":number,
+  "image":string,
+  "type":string,
+  "createdAt":string,
+  "modifiedAt":string,
+}
 // const props = useRecoilValue(postList)
-const Post = ({
-  postId,
-  nickName,
-  image,
-  contents,
-  type,
-  likeCount,
-}: IpostList) => {
+const Post = (p:Ipost) => {
   return (
     <React.Fragment>
       <MyGrid>
         <MyGrid is_flex>
-          <MyText bold>{nickName}</MyText>
+          <MyText bold>작성자 : {p.nickName}</MyText>
         </MyGrid>
         <MyGrid>
-          <MyImage shape="rectangle" src={image} />
+          <MyImage shape="rectangle" src={p.image} />
         </MyGrid>
         <MyGrid>
-          <MyText>{contents}</MyText>
+          <MyText>{p.contents}</MyText>
         </MyGrid>
         <MyGrid>
-          <MyText bold>likes : {likeCount}</MyText>
+          <MyText bold>likes : {p.likeCount}</MyText>
         </MyGrid>
       </MyGrid>
     </React.Fragment>

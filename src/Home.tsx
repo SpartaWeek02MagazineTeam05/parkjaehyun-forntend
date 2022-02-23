@@ -48,25 +48,25 @@ function Home() {
   return (
     <>
       <HomeDiv>
-        <ul>
+        <ul style={{listStyle:"none"}}>
           {postlist.map((p: any, idx: number) => (
             <li key={p.Id}>
               <PostDiv>
                 <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
+                  style={{ display: "flex", justifyContent: "space-between" ,alignItems:"center"}}
                 >
                   <h4>작성자 : {p.nickName}</h4>
-                  {document.cookie && document.cookie.split(" ")[1].split("=")[1] === p.nickname ? (
-                    <>
-                      <button
+                  {document.cookie && document.cookie.split(" ")[1].split("=")[1] !== p.nickname ? (
+                    <div>
+                      <Button
                         onClick={() => {
                           navigate("/modipost/" + idx, { state: p });
                         }}
                       >
                         수정하기
-                      </button>
-                      <button onClick={() => deletePost(p.Id)}>삭제하기</button>
-                    </>
+                      </Button>
+                      <Button onClick={() => deletePost(p.Id)}>삭제하기</Button>
+                    </div>
                   ) : (
                     ""
                   )}
@@ -318,5 +318,29 @@ const LikeButton = styled.button`
   height: 16px;
   flex-direction: row-reverse;
 `;
+const Button = styled.button`
+width: 80px;
+  height: 35px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  color: #000;
+  background-color: #ddd;
+  border: none;
+  border-radius: 45px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  margin-left: 5px;
+  }
 
+&:hover {
+  background-color: #2EE59D;
+  box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+  color: #fff;
+  transform: translateY(-7px);
+`
 export default Home;

@@ -1,0 +1,32 @@
+{ "posts":[{
+  "Id": 1,
+  "nickName" :"닉네임입니다" , 
+  "contents" :"컨텐츠 내용입니다.",
+  "likeCount":3,
+  "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrx86iKKxVcoeaJHNTUy5mHBYY2FTeufe-yA&usqp=CAU", 
+  "type": "full",
+  "createdAt":1111,
+  "modifiedAt": 2222
+},
+{
+  "Id": 2,
+  "nickName" :"닉네임입니다222" , 
+  "contents" :"컨텐츠 내용입니다.222",
+  "likeCount":33,
+  "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrx86iKKxVcoeaJHNTUy5mHBYY2FTeufe-yA&usqp=CAU", 
+  "type": "right",
+  "createdAt":111111,
+  "modifiedAt": 222222
+},
+{
+  "Id": 3,
+  "nickName" :"닉네임입니다333" , 
+  "contents" :"컨텐츠 내용입니다.333",
+  "likeCount":333,
+  "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrx86iKKxVcoeaJHNTUy5mHBYY2FTeufe-yA&usqp=CAU", 
+  "type": "left",
+  "createdAt":11111,
+  "modifiedAt": 22222
+}
+]
+}

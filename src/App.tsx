@@ -13,6 +13,8 @@ import ModiPost from "./ModiPost";
 
 
 function App() {
+// "proxy": "https://4c620725-80ad-481e-a695-fe10fcdf3781.mock.pstmn.io"
+
   return (
     <div className="App">
       <Header />

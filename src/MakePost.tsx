@@ -99,7 +99,7 @@ const MakePost = () => {
   const setlikelist = useSetRecoilState(likeList);
   async function onValid(data: IPostUpload) {
     await axios
-      .post("/api/posts", {
+      .post("api/post", {
         nickName: nick,
         image: data.image,
         contents: data.contents,

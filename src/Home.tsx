@@ -26,7 +26,7 @@ function Home() {
   }, [num]);
   const getposts = async () => {
     await axios
-      .get("api/post")
+      .get("api/homeget.json")
       .then((res) => {
         console.log(res.data);
         const postlist = res.data.posts;
@@ -36,7 +36,7 @@ function Home() {
   };
   async function deletePost(id: number) {
     await axios
-      .delete("api/post", {
+      .delete("api/deletepost.json", {
         data: {
           postId: id,
         },

@@ -96,19 +96,19 @@ const MakePost = () => {
     watch,
     formState: { errors },
   } = useForm<IForm>();
-  const setlikelist = useSetRecoilState(likeList)
+  const setlikelist = useSetRecoilState(likeList);
   async function onValid(data: IPostUpload) {
     await axios
       .post("/api/posts", {
         nickName: nick,
         image: data.image,
         contents: data.contents,
-        type: layout
+        type: layout,
       })
       .then((res) => {
         if (res.data.result) {
           alert(res.data.msg);
-          setlikelist(likelist => [0, ...likelist])
+          setlikelist((likelist) => [0, ...likelist]);
           window.location.replace("/");
         } else {
           alert("포스팅을 실패했습니다.");
@@ -136,10 +136,9 @@ const MakePost = () => {
 
   return (
     <FlexDiv>
-
       <RegisterDiv>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <RegisterTitle>포스트작성</RegisterTitle>
+          <RegisterTitle>포스트 작성</RegisterTitle>
 
           <RiLayoutColumnFill
             onClick={full}
@@ -213,7 +212,7 @@ const MakePost = () => {
         </form>
       </RegisterDiv>
 
-      {isLogin ? "":<NonLoginDiv>로그인 후 이용해주세요!</NonLoginDiv>}
+      {isLogin ? "" : <NonLoginDiv>로그인 후 이용해주세요!</NonLoginDiv>}
 
       <RegisterDiv style={{ width: "400px" }}>
         <PostView>미리보기</PostView>

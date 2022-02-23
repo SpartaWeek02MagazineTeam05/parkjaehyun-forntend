@@ -6,7 +6,10 @@ import { Suspense, useEffect, useState } from "react";
 import axios from "axios";
 import { likeList, postListAtom } from "./components/atoms";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { getImpliedNodeFormatForFile } from "typescript";
+import { Link } from "react-router-dom";
+import Detail from "./Detail";
 
 function Home() {
   const navigate = useNavigate();
@@ -15,12 +18,11 @@ function Home() {
   let likeArrZero = new Array(likelist.length).fill(0);
   const [likeArr, setLikeArr] = useState(likeArrZero);
   const [num, setNum] = useState(0);
-  let cookie = document.cookie;
-  const nick = cookie.split(" ")[1].split("=").pop();
+
 
   useEffect(() => {
     getposts();
-    console.log("updatePage"+num)
+    console.log("updatePage" + num);
   }, [num]);
   const getposts = async () => {
     await axios
@@ -39,8 +41,8 @@ function Home() {
           postId: id,
         },
       })
-      .then(()=>setNum(num+1))
-      .catch(()=>alert("삭제에 실패했습니다."))
+      .then(() => setNum(num + 1))
+      .catch(() => alert("삭제에 실패했습니다."));
   }
 
   return (
@@ -54,11 +56,11 @@ function Home() {
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   <h4>작성자 : {p.nickName}</h4>
-                  {nick !== p.nickname ? (
+                  {document.cookie && document.cookie.split(" ")[1].split("=")[1] === p.nickname ? (
                     <>
                       <button
                         onClick={() => {
-                          navigate("/modipost/" + idx);
+                          navigate("/modipost/" + idx, { state: p });
                         }}
                       >
                         수정하기
@@ -73,7 +75,7 @@ function Home() {
                   <div>
                     <img
                       onClick={() => {
-                        navigate("/detail/" + idx);
+                        navigate("/detail/" + idx, { state: p });
                       }}
                       width="380px"
                       src={p.image}
@@ -141,7 +143,7 @@ function Home() {
                       >
                         <img
                           onClick={() => {
-                            navigate("/detail/" + idx);
+                            navigate("/detail/" + idx, { state: p });
                           }}
                           style={{ marginLeft: "-85px" }}
                           width="auto"
@@ -217,7 +219,7 @@ function Home() {
                       >
                         <img
                           onClick={() => {
-                            navigate("/detail/" + idx);
+                            navigate("/detail/" + idx, { state: p });
                           }}
                           style={{ marginLeft: "-85px" }}
                           width="auto"

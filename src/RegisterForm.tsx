@@ -47,7 +47,7 @@ const RegisterForm = () => {
         .then((res) => {
           if (res.data.result) {
             alert(res.data.msg);
-            navigate("/")
+            navigate("/login")
           } else {
             alert('비밀번호 일치여부를 확인해주세요');
           }

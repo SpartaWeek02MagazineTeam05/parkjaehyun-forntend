@@ -25,9 +25,6 @@ const Header = () => {
 
   function a() {}
   const logout = () => {
-
-
-
     deleteCookie("username")
     deleteCookie("nickName")
     window.location.replace("/")

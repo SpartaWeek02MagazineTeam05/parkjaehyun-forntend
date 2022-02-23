@@ -8,6 +8,9 @@ import Home from "./Home";
 import Header from "./Header";
 import MakePost from "./MakePost";
 
+import Detail from "./Detail";
+import ModiPost from "./ModiPost";
+
 
 function App() {
   return (
@@ -20,6 +23,8 @@ function App() {
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/login" element={<LoginForm />} />
           <Route path="/makepost" element={<MakePost />} />
+          <Route path="/detail/:idx" element={<Detail />} />
+          <Route path="/modipost/:idx" element={<ModiPost />} />
         </Routes>
       </Container>
     </div>

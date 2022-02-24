@@ -18,7 +18,6 @@ interface ILogin {
   username: string;
   password: string;
   nickName?: string;
-
 }
 
 const LoginForm = () => {
@@ -38,40 +37,38 @@ const LoginForm = () => {
     formState: { errors },
   } = useForm<IForm>();
   async function onValid(data: ILogin) {
-
-    const auth = new URLSearchParams();
+    // const auth = new URLSearchParams();
     // const auth = new FormData();
-    auth.append('username', data.username);
-    auth.append('password', data.password);
-    console.log(auth)
+    // auth.append('username', data.username);
+    // auth.append('password', data.password);
+    // console.log(auth)
     await axios
-      .post("/api/register", auth)
+      .post("/api/login", {
+        username: data.username,
+        password: data.password,
+      })
       .then((res) => {
         if (res.data.result) {
-          setCookie("username", data.username);
+          setCookie("username", res.data.username);
+          setCookie("nickName", res.data.nickName);
 
           setLogin(1);
           setUserInfo(
             // console.log(res.data.username, res.data.nickName)
-           [{ username: res.data.username, nickName: res.data.nickName }]
+            [{ username: res.data.username, nickName: res.data.nickName }]
           );
-          setCookie("nickName",res.data.nickName)
           alert(res.data.message);
           navigate("/");
-          console.log("success",res)
-          
+          console.log("success", res);
         } else {
-          console.log("fail",res)
+          console.log("fail", res);
           alert(res.data.msg);
 
           // alert("비밀번호 일치여부를 확인해주세요");
         }
       })
 
-      .catch(() =>
-
-
-       alert("로그인에 문제가 발생했습니다."));
+      .catch(() => alert("로그인에 문제가 발생했습니다."));
   }
 
   // console.log(watch());

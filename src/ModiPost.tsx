@@ -32,6 +32,11 @@ interface IPostUpload {
 const ModiPost = () => {
   const p: any = useLocation().state;
 
+  const d: any = useLocation();
+
+  console.log(p)
+  console.log(d)
+
   const [layout, setLayout] = useState(p.type);
 
   let cookie = document.cookie;

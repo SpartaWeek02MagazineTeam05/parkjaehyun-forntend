@@ -7,6 +7,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { isLogin, userInfo } from "./components/atoms";
 import { MyGrid, MyText, MyButton } from "./elements/Elements";
 import { deleteCookie, getCookie } from "./shared/Cookie";
+import axios from "axios";
 
 const Header = () => {
   const navigate = useNavigate()
@@ -25,13 +26,26 @@ const Header = () => {
 
 
   function a() {}
-  const logout = () => {
+  const logout = async () => {
     deleteCookie("username")
     deleteCookie("nickName")
+    await axios
+    .post('/api/logout')
+    .then((res) => {
+      if (res.data.result) {
+        alert(res.data.msg);
+
+      } else {
+        console.log(res)
+        alert("로그아웃에 실패했습니다.");
+      }
+    })
+    .catch(() => alert('회원가입에 문제가 발생했습니다.'));
     window.location.replace("/")
     // navigate("/")
-
   }
+
+
   console.log(islogin,userinfo[0])
   
   if (islogin) {

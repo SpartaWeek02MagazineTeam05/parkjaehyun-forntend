@@ -24,19 +24,22 @@ function Home() {
     getposts();
     console.log("updatePage" + num);
   }, [num]);
+
   const getposts = async () => {
     await axios
-      .get("api/homeget.json")
+      .get("/api/post")
       .then((res) => {
         console.log(res.data);
-        const postlist = res.data.posts;
+        const postlist = res.data;
+
         return setPostlist(postlist);
       })
       .catch(() => alert("게시물이 없습니다."));
   };
+  console.log(postlist)
   async function deletePost(id: number) {
     await axios
-      .delete("api/deletepost.json", {
+      .delete("/api/post", {
         data: {
           postId: id,
         },
@@ -49,8 +52,9 @@ function Home() {
     <>
       <HomeDiv>
         <ul style={{listStyle:"none"}}>
-          {postlist.map((p: any, idx: number) => (
-            <li key={p.Id}>
+
+          {postlist?.map((p: any, idx: number) => (
+            <li key={idx}>
               <PostDiv>
                 <div
                   style={{ display: "flex", justifyContent: "space-between" ,alignItems:"center"}}
@@ -277,7 +281,9 @@ function Home() {
               </PostDiv>
             </li>
           ))}
+      
         </ul>
+                        
       </HomeDiv>
     </>
   );

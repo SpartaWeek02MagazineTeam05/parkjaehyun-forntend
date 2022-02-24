@@ -1,22 +1,22 @@
-import React from 'react';
-import styled from 'styled-components';
-import { useForm } from 'react-hook-form';
-import axios from 'axios';
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from "react";
+import styled from "styled-components";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 interface IForm {
   nickName: string;
-  userName: string;
+  username: string;
   password: string;
-  userPwdCheck: string;
+  passwordCheck: string;
 }
 
 interface IRegister {
-  userName: string;
+  username: string;
   nickName: string;
   password: string;
-  userPwdCheck: string;
+  passwordCheck: string;
 }
 
 const RegisterForm = () => {
@@ -25,7 +25,7 @@ const RegisterForm = () => {
 
   // let seePassword = true;
   // let seeUserPwdCheck = true;
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -34,29 +34,34 @@ const RegisterForm = () => {
     formState: { errors },
   } = useForm<IForm>();
   async function onValid(data: IRegister) {
-    if (data.password !== data.userPwdCheck) {
-      setError('userPwdCheck', { message: '비밀번호가 일치하지 않습니다.' }, { shouldFocus: true });
+    if (data.password !== data.passwordCheck) {
+      setError(
+        "passwordCheck",
+        { message: "비밀번호가 일치하지 않습니다." },
+        { shouldFocus: true }
+      );
     } else {
       await axios
-        .post('/api/register', {
-          userName: data.userName,
+        .post("/api/register", {
+          username: data.username,
           nickName: data.nickName,
           password: data.password,
-          userPwdCheck: data.userPwdCheck,
+          passwordCheck: data.passwordCheck,
         })
         .then((res) => {
           if (res.data.result) {
             alert(res.data.msg);
-            navigate("/login")
+            navigate("/login");
           } else {
-            alert('비밀번호 일치여부를 확인해주세요');
+            console.log(res);
+            alert(res.data.msg);
           }
         })
-        .catch(() => alert('회원가입에 문제가 발생했습니다.'));
+        .catch(() => alert("회원가입에 문제가 발생했습니다."));
     }
   }
 
-  console.log(watch())
+  console.log(watch());
 
   // console.log(watch());
 
@@ -96,19 +101,20 @@ const RegisterForm = () => {
         <form onSubmit={handleSubmit(onValid)}>
           <h5>아이디</h5>
           <InputDiv>
-            <Input 
+            <Input
               placeholder="이메일형식으로 입력하세요"
-              {...register('userName', {
-                required: '아이디를 입력해주세요',
+              {...register("username", {
+                required: "아이디를 입력해주세요",
                 // onBlur: (e) => userNameValid(e),
                 minLength: 4,
                 pattern: {
-                  value: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
-                  message: '이메일 형식이 아닙니다.',
+                  value:
+                    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
+                  message: "이메일 형식이 아닙니다.",
                 },
               })}
             ></Input>
-            <ErrorMessage>{errors?.userName?.message}</ErrorMessage>
+            <ErrorMessage>{errors?.username?.message}</ErrorMessage>
             <ErrorMessage>
               {/* {isUserNameValid
             ? "사용 가능한 아이디입니다."
@@ -119,13 +125,15 @@ const RegisterForm = () => {
           <InputDiv>
             <Input
               placeholder="닉네임을 입력하세요"
-              {...register('nickName', {
-                required: '닉네임을 입력해주세요',
+              {...register("nickName", {
+                required: "닉네임을 입력해주세요",
                 // onBlur: (e) => userNickNameValid(e),
                 minLength: 4,
               })}
             ></Input>
-            <ErrorMessage>{errors ? errors?.nickName?.message : ''}</ErrorMessage>
+            <ErrorMessage>
+              {errors ? errors?.nickName?.message : ""}
+            </ErrorMessage>
             <ErrorMessage>
               {/* {isNickNameValid
             ? "사용 가능한 닉네임입니다."
@@ -137,8 +145,8 @@ const RegisterForm = () => {
           <InputDiv>
             <Input
               placeholder="비밀번호를 입력하세요"
-              {...register('password', {
-                required: '비밀번호를 입력하세요',
+              {...register("password", {
+                required: "비밀번호를 입력하세요",
                 minLength: 4,
               })}
             ></Input>
@@ -150,19 +158,19 @@ const RegisterForm = () => {
           <InputDiv>
             <Input
               placeholder="비밀번호를 다시 입력하세요"
-              {...register('userPwdCheck', {
-                required: '비밀번호를 한번 더 입력하세요',
+              {...register("passwordCheck", {
+                required: "비밀번호를 한번 더 입력하세요",
                 minLength: 4,
               })}
             ></Input>
 
-            <ErrorMessage>{errors?.userPwdCheck?.message}</ErrorMessage>
+            <ErrorMessage>{errors?.passwordCheck?.message}</ErrorMessage>
           </InputDiv>
 
           <Button>회원가입 완료!</Button>
         </form>
         <Link to="/login">
-        <Button>로그인 페이지로!</Button>
+          <Button>로그인 페이지로!</Button>
         </Link>
       </RegisterDiv>
     </FlexDiv>

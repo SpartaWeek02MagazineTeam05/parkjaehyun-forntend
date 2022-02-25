@@ -27,13 +27,16 @@ const Header = () => {
 
   function a() {}
   const logout = async () => {
-    deleteCookie("username")
-    deleteCookie("nickName")
+    // deleteCookie("username")
+    // deleteCookie("nickName")
+    sessionStorage.removeItem("nickName")
+    sessionStorage.removeItem("token")
     await axios
     .post('/api/logout')
     .then((res) => {
       if (res.data.result) {
-        alert(res.data.msg);
+        // alert(res.data.msg);
+        console.log(res.data)
 
       } else {
         console.log(res)

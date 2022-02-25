@@ -60,7 +60,7 @@ function Home() {
                   style={{ display: "flex", justifyContent: "space-between" ,alignItems:"center"}}
                 >
                   <h4>작성자 : {p.nickName}</h4>
-                  {document.cookie && document.cookie.split(" ")[1].split("=")[1] !== p.nickname ? (
+                  {sessionStorage.getItem("nickName") !== p.nickname ? (
                     <div>
                       <Button
                         onClick={() => {

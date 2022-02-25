@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import styled from "styled-components";
 
 import { Route, Routes } from "react-router";
@@ -11,10 +11,8 @@ import MakePost from "./MakePost";
 import Detail from "./Detail";
 import ModiPost from "./ModiPost";
 
-
 function App() {
-// "proxy": "https://4c620725-80ad-481e-a695-fe10fcdf3781.mock.pstmn.io"
-
+  // "proxy": "https://4c620725-80ad-481e-a695-fe10fcdf3781.mock.pstmn.io"
   return (
     <div className="App">
       <Header />
@@ -41,3 +39,5 @@ const Container = styled.div`
 `;
 
 export default App;
+
+// 윤민님 http://3.34.144.203/ 

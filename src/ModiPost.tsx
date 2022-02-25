@@ -112,7 +112,7 @@ const ModiPost = () => {
 
   async function onValid(data: IPostUpload) {
     await axios
-      .post("/api/posts", {
+      .put("/api/post", {
         nickName: nick,
         image: data.image,
         contents: data.contents,

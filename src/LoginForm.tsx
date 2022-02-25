@@ -7,6 +7,9 @@ import { setCookie } from "./shared/Cookie";
 import { useSetRecoilState } from "recoil";
 import { isLogin, userInfo } from "./components/atoms";
 import { Link, useNavigate } from "react-router-dom";
+import { setSyntheticTrailingComments } from "typescript";
+import { RiShieldCrossLine } from "react-icons/ri";
+import jwt_decode from "jwt-decode";
 // import api from "./mockapi"
 interface IForm {
   username: string;
@@ -19,6 +22,11 @@ interface ILogin {
   password: string;
   nickName?: string;
 }
+
+var token =
+  "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0QG5hdmVyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJuaWNrTmFtZSI6ImFzYXN6eGN6YyIsImlhdCI6MTY0NTc4MjgzNiwiZXhwIjoxNjQ1NzgzNDM2fQ.aQWJWMC-nKu2u_AfE54Qn_cS9G4zx62TP205fA3kc6g";
+var decoded:any = jwt_decode(token);
+console.log(decoded.nickName);
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -43,20 +51,33 @@ const LoginForm = () => {
     // auth.append('password', data.password);
     // console.log(auth)
     await axios
-      .post("/api/login", {
-        username: data.username,
-        password: data.password,
-      })
+      .post(
+        "/api/login",
+        {
+          username: data.username,
+          password: data.password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((res) => {
         if (res.data.result) {
-          setCookie("username", res.data.username);
-          setCookie("nickName", res.data.nickName);
-
+          const tokenJSON:any = jwt_decode(res.data.tokenname)
+          
+          console.log(tokenJSON)
+          // setCookie("username", res.data.username);
+          // setCookie("nickName", res.data.nickName);
+          sessionStorage.setItem("nickName", tokenJSON.nickName);
+          sessionStorage.setItem("token", res.data.tokenname);
+          axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data
           setLogin(1);
-          setUserInfo(
-            // console.log(res.data.username, res.data.nickName)
-            [{ username: res.data.username, nickName: res.data.nickName }]
-          );
+          // setUserInfo(
+          //   // console.log(res.data.username, res.data.nickName)
+          //   [{ username: data.username, nickName: res.data.nickName }]
+          // );
           alert(res.data.message);
           navigate("/");
           console.log("success", res);
@@ -67,8 +88,10 @@ const LoginForm = () => {
           // alert("비밀번호 일치여부를 확인해주세요");
         }
       })
-
-      .catch(() => alert("로그인에 문제가 발생했습니다."));
+      .catch((err) => {
+        console.error(err);
+        alert("로그인에 문제가 발생했습니다.");
+      });
   }
 
   // console.log(watch());

@@ -62,3 +62,15 @@ export const likeList = atom<number[]>({
   default:[]
 })
 
+
+interface ILike {
+  postId:number;
+  userId:number;
+  id:number
+}
+
+export const myLikeLists = atom<ILike[]>({
+  key: "like",
+  default:[{postId:-1,userId:-1,id:-1}]
+})
+

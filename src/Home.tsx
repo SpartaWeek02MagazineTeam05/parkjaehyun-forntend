@@ -4,7 +4,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 import { Suspense, useEffect, useState } from "react";
 import axios from "axios";
-import { likeList, postListAtom } from "./components/atoms";
+import { likeList, myLikeLists, postListAtom } from "./components/atoms";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { getImpliedNodeFormatForFile } from "typescript";
@@ -14,10 +14,12 @@ import Detail from "./Detail";
 function Home() {
   const navigate = useNavigate();
   const [postlist, setPostlist] = useState([]);
-  const [likelist, setLikeList] = useRecoilState(likeList);
-  let likeArrZero = new Array(likelist.length).fill(0);
-  const [likeArr, setLikeArr] = useState(likeArrZero);
+
+  const [likelist, setLikeList] = useRecoilState(myLikeLists);
+
+
   const [num, setNum] = useState(0);
+  console.log("likelist : ", likelist);
 
   useEffect(() => {
     getposts();
@@ -32,13 +34,48 @@ function Home() {
           : null,
       })
       .then((res) => {
-        console.log("res : ", res);
+        console.log("homeres : ", res);
         const postlist = res.data.total;
-        return setPostlist(postlist);
+        const myLike = res.data.myLike;
+
+
+        setPostlist(postlist);
+        if (myLike) {
+          setLikeList(myLike);
+        }
       })
       .catch(() => alert("게시물이 없습니다."));
   };
   console.log(postlist);
+
+  const clickLike = async (id: number) => {
+    await axios
+      .post(
+        "/api/like",
+        {
+          userId: sessionStorage.getItem("userId")
+            ? sessionStorage.getItem("userId")
+            : null,
+          postId: id,
+        },
+        {
+          headers: {
+            "X-Auth-Token": `${sessionStorage.getItem("token")}`,
+            "content-type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        setNum(num + 1);
+        console.log("likeres : ", res);
+
+      })
+      .catch(() => {
+        alert("좋으면 로그인부터 하셈");
+        navigate("/login");
+      });
+  };
+
   async function deletePost(id: number) {
     await axios
       .delete("/api/post", {
@@ -48,6 +85,7 @@ function Home() {
         },
         data: {
           postId: id,
+          userId: sessionStorage.getItem("userId"),
         },
       })
       .then((res) => {
@@ -56,7 +94,14 @@ function Home() {
       })
       .catch(() => alert("삭제에 실패했습니다."));
   }
-
+  function isLike(id: number) {
+    for (let i = 0; i < likelist.length + 1; i++) {
+      if (id === likelist[i]?.postId) {
+        return true;
+      }
+    }
+    return false;
+  }
   return (
     <>
       <HomeDiv>
@@ -98,44 +143,18 @@ function Home() {
                     ></img>
                     <div style={{ width: "30px", height: "25px" }}>
                       <Likes>
-                        {p.likeCount + likeArr[idx]}
-                        {likelist[idx] ? (
+                        {p.likeCount}
+                        {isLike(p.id) ? (
                           <FaHeart
                             onClick={() => {
-                              // setLikeList((old) => {
-                              //   return [
-                              //     ...old.slice(0, idx),
-                              //     0,
-                              //     ...old.slice(idx + 1),
-                              //   ];
-                              // });
-                              setLikeArr((old) => {
-                                return [
-                                  ...old.slice(0, idx),
-                                  likeArr[idx] - 1,
-                                  ...old.slice(idx + 1),
-                                ];
-                              });
+                              clickLike(p.id);
                             }}
                             style={{ color: "red", marginRight: "4px" }}
                           />
                         ) : (
                           <FaRegHeart
                             onClick={() => {
-                              // setLikeList((old) => {
-                              //   return [
-                              //     ...old.slice(0, idx),
-                              //     1,
-                              //     ...old.slice(idx + 1),
-                              //   ];
-                              // });
-                              setLikeArr((old) => {
-                                return [
-                                  ...old.slice(0, idx),
-                                  likeArr[idx] + 1,
-                                  ...old.slice(idx + 1),
-                                ];
-                              });
+                              clickLike(p.id);
                             }}
                             style={{ color: "red", marginRight: "4px" }}
                           />
@@ -171,52 +190,25 @@ function Home() {
                         {p.contents}
                       </TextView>
                     </div>
-                    <div style={{ width: "30px", height: "25px" }}>
-                      <Likes>
-                        {p.likeCount + likeArr[idx]}
-                        {likelist[idx] ? (
-                          <FaHeart
-                            onClick={() => {
-                              // setLikeList((old) => {
-                              //   return [
-                              //     ...old.slice(0, idx),
-                              //     0,
-                              //     ...old.slice(idx + 1),
-                              //   ];
-                              // });
-                              setLikeArr((old) => {
-                                return [
-                                  ...old.slice(0, idx),
-                                  likeArr[idx] - 1,
-                                  ...old.slice(idx + 1),
-                                ];
-                              });
-                            }}
-                            style={{ color: "red", marginRight: "4px" }}
-                          />
-                        ) : (
-                          <FaRegHeart
-                            onClick={() => {
-                              // setLikeList((old) => {
-                              //   return [
-                              //     ...old.slice(0, idx),
-                              //     1,
-                              //     ...old.slice(idx + 1),
-                              //   ];
-                              // });
-                              setLikeArr((old) => {
-                                return [
-                                  ...old.slice(0, idx),
-                                  likeArr[idx] + 1,
-                                  ...old.slice(idx + 1),
-                                ];
-                              });
-                            }}
-                            style={{ color: "red", marginRight: "4px" }}
-                          />
-                        )}
-                      </Likes>
-                    </div>
+                    <div style={{ width: "30px", height: "25px" }}></div>
+                    <Likes>
+                      {p.likeCount}
+                      {isLike(p.id) ? (
+                        <FaHeart
+                          onClick={() => {
+                            clickLike(p.id);
+                          }}
+                          style={{ color: "red", marginRight: "4px" }}
+                        />
+                      ) : (
+                        <FaRegHeart
+                          onClick={() => {
+                            clickLike(p.id);
+                          }}
+                          style={{ color: "red", marginRight: "4px" }}
+                        />
+                      )}
+                    </Likes>
                   </div>
                 )}
                 {p.type === "left" && (
@@ -245,44 +237,18 @@ function Home() {
                       </div>
                     </div>
                     <Likes>
-                      {p.likeCount + likeArr[idx]}
-                      {likelist[idx] ? (
+                      {p.likeCount}
+                      {isLike(p.id) ? (
                         <FaHeart
                           onClick={() => {
-                            setLikeList((old) => {
-                              return [
-                                ...old.slice(0, idx),
-                                0,
-                                ...old.slice(idx + 1),
-                              ];
-                            });
-                            setLikeArr((old) => {
-                              return [
-                                ...old.slice(0, idx),
-                                likeArr[idx] - 1,
-                                ...old.slice(idx + 1),
-                              ];
-                            });
+                            clickLike(p.id);
                           }}
                           style={{ color: "red", marginRight: "4px" }}
                         />
                       ) : (
                         <FaRegHeart
                           onClick={() => {
-                            setLikeList((old) => {
-                              return [
-                                ...old.slice(0, idx),
-                                1,
-                                ...old.slice(idx + 1),
-                              ];
-                            });
-                            setLikeArr((old) => {
-                              return [
-                                ...old.slice(0, idx),
-                                likeArr[idx] + 1,
-                                ...old.slice(idx + 1),
-                              ];
-                            });
+                            clickLike(p.id);
                           }}
                           style={{ color: "red", marginRight: "4px" }}
                         />
@@ -298,7 +264,7 @@ function Home() {
     </>
   );
 
-  // const postlist = useRecoilValue(postList);
+
 }
 
 const HomeDiv = styled.div`

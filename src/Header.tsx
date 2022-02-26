@@ -31,19 +31,21 @@ const Header = () => {
     // deleteCookie("nickName")
     sessionStorage.removeItem("nickName")
     sessionStorage.removeItem("token")
-    await axios
-    .post('/api/logout')
-    .then((res) => {
-      if (res.data.result) {
-        // alert(res.data.msg);
-        console.log(res.data)
+    sessionStorage.removeItem("userId")
 
-      } else {
-        console.log(res)
-        alert("로그아웃에 실패했습니다.");
-      }
-    })
-    .catch(() => alert('회원가입에 문제가 발생했습니다.'));
+    // await axios
+    // .post('/api/logout')
+    // .then((res) => {
+    //   if (res.data.result) {
+    //     // alert(res.data.msg);
+    //     console.log(res.data)
+
+    //   } else {
+    //     console.log(res)
+    //     alert("로그아웃에 실패했습니다.");
+    //   }
+    // })
+    // .catch(() => alert('회원가입에 문제가 발생했습니다.'));
     window.location.replace("/")
     // navigate("/")
   }

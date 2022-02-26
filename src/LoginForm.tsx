@@ -23,10 +23,6 @@ interface ILogin {
   nickName?: string;
 }
 
-var token =
-  "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0QG5hdmVyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJuaWNrTmFtZSI6ImFzYXN6eGN6YyIsImlhdCI6MTY0NTc4MjgzNiwiZXhwIjoxNjQ1NzgzNDM2fQ.aQWJWMC-nKu2u_AfE54Qn_cS9G4zx62TP205fA3kc6g";
-var decoded:any = jwt_decode(token);
-console.log(decoded.nickName);
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -67,12 +63,17 @@ const LoginForm = () => {
         if (res.data.result) {
           const tokenJSON:any = jwt_decode(res.data.tokenname)
           
-          console.log(tokenJSON)
+          console.log("token : ",tokenJSON)
           // setCookie("username", res.data.username);
           // setCookie("nickName", res.data.nickName);
           sessionStorage.setItem("nickName", tokenJSON.nickName);
+          sessionStorage.setItem("userId", tokenJSON.userId)
           sessionStorage.setItem("token", res.data.tokenname);
-          axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data
+          console.log("login res : ",res)
+
+          // axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data
+          // axios.defaults.headers.common['X-AUTH-TOKEN'] = res.data.tokenname
+          console.log("axios : ",axios.defaults)
           setLogin(1);
           // setUserInfo(
           //   // console.log(res.data.username, res.data.nickName)

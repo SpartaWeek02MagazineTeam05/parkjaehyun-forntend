@@ -19,7 +19,6 @@ function Home() {
   const [likeArr, setLikeArr] = useState(likeArrZero);
   const [num, setNum] = useState(0);
 
-
   useEffect(() => {
     getposts();
     console.log("updatePage" + num);
@@ -27,38 +26,50 @@ function Home() {
 
   const getposts = async () => {
     await axios
-      .get("/api/post")
+      .post("/api/showpost", {
+        userId: sessionStorage.getItem("userId")
+          ? sessionStorage.getItem("userId")
+          : null,
+      })
       .then((res) => {
-        console.log(res.data);
-        const postlist = res.data;
-
+        console.log("res : ", res);
+        const postlist = res.data.total;
         return setPostlist(postlist);
       })
       .catch(() => alert("게시물이 없습니다."));
   };
-  console.log(postlist)
+  console.log(postlist);
   async function deletePost(id: number) {
     await axios
       .delete("/api/post", {
+        headers: {
+          "X-Auth-Token": `${sessionStorage.getItem("token")}`,
+          "content-type": "application/json",
+        },
         data: {
           postId: id,
         },
       })
-      .then(() => setNum(num + 1))
+      .then((res) => {
+        console.log("deleteres:", res);
+        setNum(num + 1);
+      })
       .catch(() => alert("삭제에 실패했습니다."));
   }
-  console.log("sdf",postlist, sessionStorage.getItem("nickName"))
-  
+
   return (
     <>
       <HomeDiv>
-        <ul style={{listStyle:"none"}}>
-
+        <ul style={{ listStyle: "none" }}>
           {postlist?.map((p: any, idx: number) => (
             <li key={idx}>
               <PostDiv>
                 <div
-                  style={{ display: "flex", justifyContent: "space-between" ,alignItems:"center"}}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
                 >
                   <h4>작성자 : {p.nickName}</h4>
                   {sessionStorage.getItem("nickName") === p.nickName ? (
@@ -70,7 +81,7 @@ function Home() {
                       >
                         수정하기
                       </Button>
-                      <Button onClick={() => deletePost(p.Id)}>삭제하기</Button>
+                      <Button onClick={() => deletePost(p.id)}>삭제하기</Button>
                     </div>
                   ) : (
                     ""
@@ -91,13 +102,13 @@ function Home() {
                         {likelist[idx] ? (
                           <FaHeart
                             onClick={() => {
-                              setLikeList((old) => {
-                                return [
-                                  ...old.slice(0, idx),
-                                  0,
-                                  ...old.slice(idx + 1),
-                                ];
-                              });
+                              // setLikeList((old) => {
+                              //   return [
+                              //     ...old.slice(0, idx),
+                              //     0,
+                              //     ...old.slice(idx + 1),
+                              //   ];
+                              // });
                               setLikeArr((old) => {
                                 return [
                                   ...old.slice(0, idx),
@@ -111,13 +122,13 @@ function Home() {
                         ) : (
                           <FaRegHeart
                             onClick={() => {
-                              setLikeList((old) => {
-                                return [
-                                  ...old.slice(0, idx),
-                                  1,
-                                  ...old.slice(idx + 1),
-                                ];
-                              });
+                              // setLikeList((old) => {
+                              //   return [
+                              //     ...old.slice(0, idx),
+                              //     1,
+                              //     ...old.slice(idx + 1),
+                              //   ];
+                              // });
                               setLikeArr((old) => {
                                 return [
                                   ...old.slice(0, idx),
@@ -166,13 +177,13 @@ function Home() {
                         {likelist[idx] ? (
                           <FaHeart
                             onClick={() => {
-                              setLikeList((old) => {
-                                return [
-                                  ...old.slice(0, idx),
-                                  0,
-                                  ...old.slice(idx + 1),
-                                ];
-                              });
+                              // setLikeList((old) => {
+                              //   return [
+                              //     ...old.slice(0, idx),
+                              //     0,
+                              //     ...old.slice(idx + 1),
+                              //   ];
+                              // });
                               setLikeArr((old) => {
                                 return [
                                   ...old.slice(0, idx),
@@ -186,13 +197,13 @@ function Home() {
                         ) : (
                           <FaRegHeart
                             onClick={() => {
-                              setLikeList((old) => {
-                                return [
-                                  ...old.slice(0, idx),
-                                  1,
-                                  ...old.slice(idx + 1),
-                                ];
-                              });
+                              // setLikeList((old) => {
+                              //   return [
+                              //     ...old.slice(0, idx),
+                              //     1,
+                              //     ...old.slice(idx + 1),
+                              //   ];
+                              // });
                               setLikeArr((old) => {
                                 return [
                                   ...old.slice(0, idx),
@@ -282,9 +293,7 @@ function Home() {
               </PostDiv>
             </li>
           ))}
-      
         </ul>
-                        
       </HomeDiv>
     </>
   );
@@ -349,5 +358,5 @@ width: 80px;
   box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
   color: #fff;
   transform: translateY(-7px);
-`
+`;
 export default Home;

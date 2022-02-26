@@ -31,7 +31,6 @@ interface IPostUpload {
 
 const MakePost = () => {
   const [layout, setLayout] = useState("full");
-  
 
   const nick = sessionStorage.getItem("nickName");
 
@@ -100,22 +99,28 @@ const MakePost = () => {
   async function onValid(data: IPostUpload) {
     await axios
       .post("api/post", {
-        nickName: nick,
+        nickName: sessionStorage.getItem("nickName"),
         image: data.image,
         contents: data.contents,
         type: layout,
-      })
+      },
+      {
+        headers: {
+            "X-Auth-Token": `${sessionStorage.getItem("token")}`,
+            "content-type": "application/json"
+        },
+      }
+      )
       .then((res) => {
         if (res.data.result) {
           alert(res.data.msg);
           setlikelist((likelist) => [0, ...likelist]);
           window.location.replace("/");
         } else {
-          console.log(res)
+          console.log(res);
           alert(res.data.msg);
           alert("포스팅을 실패했습니다.");
           window.location.replace("/login");
-
         }
       })
 

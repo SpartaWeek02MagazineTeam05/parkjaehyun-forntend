@@ -32,16 +32,11 @@ interface IPostUpload {
 const ModiPost = () => {
   const p: any = useLocation().state;
 
-  const d: any = useLocation();
-
-  console.log(p)
-  console.log(d)
-
   const [layout, setLayout] = useState(p.type);
 
-  let cookie = document.cookie;
+  // let cookie = document.cookie;
 
-  const nick = cookie.split(" ")[1].split("=").pop();
+  // const nick = cookie.split(" ")[1].split("=").pop();
 
   const navigate = useNavigate();
 
@@ -109,17 +104,29 @@ const ModiPost = () => {
       contents: p.contents,
     },
   });
-
+  console.log("postId:",p.id)
   async function onValid(data: IPostUpload) {
     await axios
-      .put("/api/post", {
-        nickName: nick,
-        image: data.image,
-        contents: data.contents,
-        type: layout,
-      })
+      .put(
+        "/api/post",
+        {
+          postId: p.id,
+          nickName: sessionStorage.getItem("nickName"),
+          likeCount: 0,
+          contents: data.contents,
+          image: data.image,
+          type: layout,
+        },
+        {
+          headers: {
+            "X-Auth-Token": `${sessionStorage.getItem("token")}`,
+            "content-type": "application/json",
+          },
+        }
+      )
       .then((res) => {
         if (res.data.result) {
+          console.log(res)
           alert(res.data.msg);
           window.location.replace("/");
         } else {
@@ -226,7 +233,7 @@ const ModiPost = () => {
 
       <RegisterDiv style={{ width: "400px" }}>
         <PostView>미리보기</PostView>
-        <h4>작성자 : {nick}</h4>
+        <h4>작성자 : {sessionStorage.getItem("nickName")}</h4>
         {layout === "full" && (
           <>
             <img width="380px" src={watch().image}></img>

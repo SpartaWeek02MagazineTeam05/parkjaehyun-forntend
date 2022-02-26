@@ -59,6 +59,6 @@ export const userInfo = atom<IUserInfo[]>({
 
 export const likeList = atom<number[]>({
   key: "likeList",
-  default:[0,0,0]
+  default:[]
 })
 

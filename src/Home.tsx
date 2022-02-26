@@ -47,7 +47,8 @@ function Home() {
       .then(() => setNum(num + 1))
       .catch(() => alert("삭제에 실패했습니다."));
   }
-
+  console.log("sdf",postlist, sessionStorage.getItem("nickName"))
+  
   return (
     <>
       <HomeDiv>
@@ -60,7 +61,7 @@ function Home() {
                   style={{ display: "flex", justifyContent: "space-between" ,alignItems:"center"}}
                 >
                   <h4>작성자 : {p.nickName}</h4>
-                  {sessionStorage.getItem("nickName") !== p.nickname ? (
+                  {sessionStorage.getItem("nickName") === p.nickName ? (
                     <div>
                       <Button
                         onClick={() => {

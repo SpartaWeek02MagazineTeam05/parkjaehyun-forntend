@@ -33,7 +33,6 @@ const P = styled.p`
   color: ${(props:IText) => props.color};
   font-size: ${(props) => props.size};
   margin: ${(props) => props.margin};
-
   font-weight: ${(props) => (props.bold? "600" : "400")};
 `;
 

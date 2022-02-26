@@ -14,10 +14,10 @@ const Header = () => {
   const [islogin, setIslogin] = useRecoilState(isLogin);
   const [userinfo,setUserInfo] = useRecoilState(userInfo);
 
-  let cookie = document.cookie;
+
 
   useEffect(() => {
-    if (cookie) {
+    if (sessionStorage.getItem("token")) {
       setIslogin(1);
     } else {
       setIslogin(0);

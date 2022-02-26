@@ -31,9 +31,9 @@ interface IPostUpload {
 
 const MakePost = () => {
   const [layout, setLayout] = useState("full");
-  let cookie = document.cookie;
+  
 
-  const nick = cookie.split(" ")[1].split("=").pop();
+  const nick = sessionStorage.getItem("nickName");
 
   const navigate = useNavigate();
 
@@ -111,7 +111,11 @@ const MakePost = () => {
           setlikelist((likelist) => [0, ...likelist]);
           window.location.replace("/");
         } else {
+          console.log(res)
+          alert(res.data.msg);
           alert("포스팅을 실패했습니다.");
+          window.location.replace("/login");
+
         }
       })
 

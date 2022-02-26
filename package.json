@@ -64,5 +64,5 @@
     "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.5.1"
   },
-  "proxy": "http://3.34.144.203"
+  "proxy": "http://15.164.165.5"
 }

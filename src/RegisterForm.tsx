@@ -6,8 +6,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 interface IForm {
-  nickName: string;
   username: string;
+  nickName: string;
   password: string;
   passwordCheck: string;
 }
@@ -20,11 +20,6 @@ interface IRegister {
 }
 
 const RegisterForm = () => {
-  // const [isUserNameValid, setIsUserNameValid] = useState(false);
-  // const [isNickNameValid, setIsNickNameValid] = useState(false);
-
-  // let seePassword = true;
-  // let seeUserPwdCheck = true;
   const navigate = useNavigate();
   const {
     register,
@@ -37,7 +32,7 @@ const RegisterForm = () => {
     if (data.password !== data.passwordCheck) {
       setError(
         "passwordCheck",
-        { message: "비밀번호가 일치하지 않습니다." },
+        { message: "비밀번호가 일치지 않습니다." },
         { shouldFocus: true }
       );
     } else {
@@ -63,36 +58,6 @@ const RegisterForm = () => {
 
   console.log(watch());
 
-  // console.log(watch());
-
-  // async function userNameValid(e) {
-
-  //   await axios
-  //     .post("/api/register/username", {
-  //       userName: e.currentTarget.value,
-  //     })
-  //     .then((res) => {
-  //       if (res.result) {
-  //         setIsUserNameValid(false);
-  //       } else {
-  //         setIsUserNameValid(true);
-  //       }
-  //     });
-  // }
-  // async function userNickNameValid(e) {
-  //   await axios
-  //     .post("/api/register/nickname", {
-  //       nickName: e.currentTarget.value,
-  //     })
-  //     .then((res) => {
-  //       if (res.result) {
-  //         setIsNickNameValid(false);
-  //       } else {
-  //         setIsNickNameValid(true);
-  //       }
-  //     });
-  // }
-
   return (
     <FlexDiv>
       <RegisterDiv>
@@ -115,11 +80,6 @@ const RegisterForm = () => {
               })}
             ></Input>
             <ErrorMessage>{errors?.username?.message}</ErrorMessage>
-            <ErrorMessage>
-              {/* {isUserNameValid
-            ? "사용 가능한 아이디입니다."
-            : "이미 존재하는 아이디입니다."} */}
-            </ErrorMessage>
           </InputDiv>
           <h5>닉네임</h5>
           <InputDiv>
@@ -127,17 +87,12 @@ const RegisterForm = () => {
               placeholder="닉네임을 입력하세요"
               {...register("nickName", {
                 required: "닉네임을 입력해주세요",
-                // onBlur: (e) => userNickNameValid(e),
+
                 minLength: 4,
               })}
             ></Input>
             <ErrorMessage>
               {errors ? errors?.nickName?.message : ""}
-            </ErrorMessage>
-            <ErrorMessage>
-              {/* {isNickNameValid
-            ? "사용 가능한 닉네임입니다."
-          : "이미 존재하는 닉네임입니다."} */}
             </ErrorMessage>
           </InputDiv>
 

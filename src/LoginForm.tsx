@@ -78,7 +78,7 @@ const LoginForm = () => {
           //   // console.log(res.data.username, res.data.nickName)
           //   [{ username: data.username, nickName: res.data.nickName }]
           // );
-          alert(res.data.message);
+          alert(res.data.msg);
           navigate("/");
           console.log("success", res);
         } else {

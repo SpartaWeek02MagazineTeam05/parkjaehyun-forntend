@@ -1,22 +1,18 @@
 import styled from "styled-components";
 
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { likeList, myLikeLists, postListAtom } from "./components/atoms";
+import { myLikeLists } from "./components/atoms";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
-import { Route, Routes, useNavigate } from "react-router-dom";
-import { getImpliedNodeFormatForFile } from "typescript";
-import { Link } from "react-router-dom";
-import Detail from "./Detail";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
   const navigate = useNavigate();
   const [postlist, setPostlist] = useState([]);
 
   const [likelist, setLikeList] = useRecoilState(myLikeLists);
-
 
   const [num, setNum] = useState(0);
   console.log("likelist : ", likelist);
@@ -37,7 +33,6 @@ function Home() {
         console.log("homeres : ", res);
         const postlist = res.data.total;
         const myLike = res.data.myLike;
-
 
         setPostlist(postlist);
         if (myLike) {
@@ -68,7 +63,6 @@ function Home() {
       .then((res) => {
         setNum(num + 1);
         console.log("likeres : ", res);
-
       })
       .catch(() => {
         alert("좋으면 로그인부터 하셈");
@@ -263,8 +257,6 @@ function Home() {
       </HomeDiv>
     </>
   );
-
-
 }
 
 const HomeDiv = styled.div`

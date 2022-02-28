@@ -104,7 +104,7 @@ const ModiPost = () => {
       contents: p.contents,
     },
   });
-  console.log("postId:",p.id)
+  console.log("postId:", p.id);
   async function onValid(data: IPostUpload) {
     await axios
       .put(
@@ -126,7 +126,7 @@ const ModiPost = () => {
       )
       .then((res) => {
         if (res.data.result) {
-          console.log(res)
+          console.log(res);
           alert(res.data.msg);
           window.location.replace("/");
         } else {

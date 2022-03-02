@@ -108,7 +108,7 @@ const ModiPost = () => {
   async function onValid(data: IPostUpload) {
     await axios
       .put(
-        "/api/post",
+        `${process.env.REACT_APP_DB_ROOT}/api/post`,
         {
           postId: p.id,
           nickName: sessionStorage.getItem("nickName"),

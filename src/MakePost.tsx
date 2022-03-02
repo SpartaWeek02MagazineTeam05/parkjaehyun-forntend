@@ -98,18 +98,20 @@ const MakePost = () => {
   const setlikelist = useSetRecoilState(likeList);
   async function onValid(data: IPostUpload) {
     await axios
-      .post("api/post", {
-        nickName: sessionStorage.getItem("nickName"),
-        image: data.image,
-        contents: data.contents,
-        type: layout,
-      },
-      {
-        headers: {
-            "X-Auth-Token": `${sessionStorage.getItem("token")}`,
-            "content-type": "application/json"
+      .post(
+        `${process.env.REACT_APP_DB_ROOT}/api/post`,
+        {
+          nickName: sessionStorage.getItem("nickName"),
+          image: data.image,
+          contents: data.contents,
+          type: layout,
         },
-      }
+        {
+          headers: {
+            "X-Auth-Token": `${sessionStorage.getItem("token")}`,
+            "content-type": "application/json",
+          },
+        }
       )
       .then((res) => {
         if (res.data.result) {

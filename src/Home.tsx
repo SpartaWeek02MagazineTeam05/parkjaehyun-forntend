@@ -8,6 +8,8 @@ import { myLikeLists } from "./components/atoms";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
+import { ReactQueryDevtools } from "react-query/devtools";
+import { useMutation, useQuery } from "react-query";
 function Home() {
   const navigate = useNavigate();
   const [postlist, setPostlist] = useState([]);
@@ -17,17 +19,31 @@ function Home() {
   const [num, setNum] = useState(0);
   console.log("likelist : ", likelist);
 
-  useEffect(() => {
-    getposts();
-    console.log("updatePage" + num);
-  }, [num]);
+  // const { isSuccess, data } = useQuery("data", async () => {
+  //   await axios
+  //     .post("/api/showpost", {
+  //       userId: sessionStorage.getItem("userId"),
+  //     })
+  //     .then((res) => {
+  //       console.log("homeres : ", res);
+  //       const postlist = res.data.post;
+  //       // const myLike = res.data.myLike;
 
+  //       // setPostlist(postlist);
+  //       // if (myLike) {
+  //       //   setLikeList(myLike);
+  //       // }
+  //     });
+  // });
+  // console.log("homedata",data)
+  useEffect(() => {
+    console.log("updatePage" + num);
+    getposts();
+  }, [num]);
   const getposts = async () => {
     await axios
-      .post("/api/showpost", {
-        userId: sessionStorage.getItem("userId")
-          ? sessionStorage.getItem("userId")
-          : null,
+      .post(`${process.env.REACT_APP_DB_ROOT}/api/showpost`, {
+        userId: sessionStorage.getItem("userId"),
       })
       .then((res) => {
         console.log("homeres : ", res);
@@ -42,11 +58,10 @@ function Home() {
       .catch(() => alert("게시물이 없습니다."));
   };
   console.log(postlist);
-
   const clickLike = async (id: number) => {
     await axios
       .post(
-        "/api/like",
+        `${process.env.REACT_APP_DB_ROOT}/api/like`,
         {
           userId: sessionStorage.getItem("userId")
             ? sessionStorage.getItem("userId")
@@ -69,10 +84,10 @@ function Home() {
         navigate("/login");
       });
   };
-
+  console.log("db:",process.env.REACT_APP_DB_ROOT);
   async function deletePost(id: number) {
     await axios
-      .delete("/api/post", {
+      .delete(`${process.env.REACT_APP_DB_ROOT}/api/post`, {
         headers: {
           "X-Auth-Token": `${sessionStorage.getItem("token")}`,
           "content-type": "application/json",
@@ -96,8 +111,15 @@ function Home() {
     }
     return false;
   }
+  // const { isLoading } = useMutation(getposts);
+
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
+
   return (
     <>
+
       <HomeDiv>
         <ul style={{ listStyle: "none" }}>
           {postlist?.map((p: any, idx: number) => (
@@ -255,6 +277,7 @@ function Home() {
           ))}
         </ul>
       </HomeDiv>
+      <ReactQueryDevtools initialIsOpen />
     </>
   );
 }

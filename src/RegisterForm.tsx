@@ -37,7 +37,7 @@ const RegisterForm = () => {
       );
     } else {
       await axios
-        .post("/api/register", {
+        .post(`${process.env.REACT_APP_DB_ROOT}/api/register`, {
           username: data.username,
           nickName: data.nickName,
           password: data.password,

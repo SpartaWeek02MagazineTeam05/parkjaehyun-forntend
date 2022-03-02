@@ -48,7 +48,7 @@ const LoginForm = () => {
     // console.log(auth)
     await axios
       .post(
-        "/api/login",
+        `${process.env.REACT_APP_DB_ROOT}/api/login`,
         {
           username: data.username,
           password: data.password,
@@ -61,19 +61,19 @@ const LoginForm = () => {
       )
       .then((res) => {
         if (res.data.result) {
-          const tokenJSON:any = jwt_decode(res.data.tokenname)
-          
-          console.log("token : ",tokenJSON)
+          const tokenJSON: any = jwt_decode(res.data.tokenname);
+
+          console.log("token : ", tokenJSON);
           // setCookie("username", res.data.username);
           // setCookie("nickName", res.data.nickName);
           sessionStorage.setItem("nickName", tokenJSON.nickName);
-          sessionStorage.setItem("userId", tokenJSON.userId)
+          sessionStorage.setItem("userId", tokenJSON.userId);
           sessionStorage.setItem("token", res.data.tokenname);
-          console.log("login res : ",res)
+          console.log("login res : ", res);
 
           // axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data
           // axios.defaults.headers.common['X-AUTH-TOKEN'] = res.data.tokenname
-          console.log("axios : ",axios.defaults)
+          console.log("axios : ", axios.defaults);
           setLogin(1);
           // setUserInfo(
           //   // console.log(res.data.username, res.data.nickName)
